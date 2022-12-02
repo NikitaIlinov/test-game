@@ -13,6 +13,7 @@ public class Main {
         while (monsterBob.getAttack() != 0 & playerNik.getAttack() != 0) {
             Utility.Navigation.initialMenu(playerNik, monsterBob);
             int choice = scanner.nextInt();
+            //switch/case
             if (choice == 1) {
                 System.out.println(playerNik);
                 Navigation.choosingAnAction();

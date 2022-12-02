@@ -1,27 +1,18 @@
 package Entity;
-
-
 import java.util.Scanner;
 
 public class Entity {
 
     Scanner scanner = new Scanner(System.in);
 
-
-    public final int MAX_HEALTH = 0;
-
     private String name;
     private int health;
     private int attack;
     private int protection;
     private int damage;
+    protected int maxHealth;
 
     private static int attemptToRestoreHealth = 3;
-
-
-    public int getMAX_HEALTH() {
-        return MAX_HEALTH;
-    }
 
     public String getName() {
         return name;
@@ -109,7 +100,7 @@ public class Entity {
             if (restoreHealth == 1) {
                 try {
                     entity.setAttemptToRestoreHealth(attemptToRestoreHealth - 1);
-                    entity.setHealth(entity.getMAX_HEALTH() / 2);
+                    entity.setHealth(entity.maxHealth / 2);
                 } catch (IllegalArgumentException exception) {
                     try {
                         entity.setHealth(0);
@@ -126,10 +117,10 @@ public class Entity {
     public int random() {
         int random = 0;
 
+        //Что за странный цикл? Он же ничего не делает
         for (int i = 0; i < getDamage(); i++) {
             random = (int) (Math.random() * 6 + 1);
             return random;
-
         }
         return random;
     }
@@ -148,6 +139,7 @@ public class Entity {
         if (attemptToRestoreHealth < 1) {
             throw new IllegalArgumentException();
         } else {
+            //Не очень хорошо обращаться к статике через инстанс
             this.attemptToRestoreHealth = attemptToRestoreHealth;
         }
     }
