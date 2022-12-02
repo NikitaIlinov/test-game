@@ -1,5 +1,7 @@
 package Entity;
 
+import com.sun.tools.javac.Main;
+
 public class Player extends Entity {
     private static final Player INSTANCE = new Player();
 
@@ -18,4 +20,9 @@ public class Player extends Entity {
         this.setDamage(damage);
     }
 
-}
+    @Override
+    public int getMAX_HEALTH() {
+        return 30;
+    }
+
+    }

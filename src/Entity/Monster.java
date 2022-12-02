@@ -18,7 +18,8 @@ public class Monster extends Entity {
         this.setDamage(damage);
     }
 
-
-
-
+    @Override
+    public int getMAX_HEALTH() {
+        return 30;
+    }
 }
