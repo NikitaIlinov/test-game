@@ -1,14 +1,11 @@
 package Entity;
 
-
+import java.util.HashSet;
 import java.util.Scanner;
 
 public class Entity {
 
     Scanner scanner = new Scanner(System.in);
-
-
-    public final int MAX_HEALTH = 0;
 
     private String name;
     private int health;
@@ -16,11 +13,18 @@ public class Entity {
     private int protection;
     private int damage;
 
-    private static int attemptToRestoreHealth = 3;
-
+    protected final int MAX_HEALTH = 0;
+    protected int attemptToRestoreHealth = 3;
 
     public int getMAX_HEALTH() {
         return MAX_HEALTH;
+    }
+
+    public int getAttemptToRestoreHealth(){
+        return attemptToRestoreHealth;
+    }
+
+    public void setAttemptToRestoreHealth(int attemptToRestoreHealth) {
     }
 
     public String getName() {
@@ -81,12 +85,12 @@ public class Entity {
 
 
     public void attack(Entity entity) {
-        if (random() == 5 || random() == 6) {
+        if (random()) {
             int attack = Math.abs(this.getAttack() - entity.getProtection()) + 1;
             if (entity.getProtection() > 0) {
                 try {
                     entity.setProtection(entity.getProtection() - attack);
-                    System.out.println("Атака произведена. Защита остановила удар. " + entity.getName() + ": осталось " + entity.getProtection() + " единиц защиты.");
+                    System.out.println("\n" + "На ваших кубиках выпало заветное число 5 или 6." + "\n" + "Атака произведена. Защита остановила удар." + "\n" + entity.getName() + ": осталось " + entity.getProtection() + " единиц(ы) защиты." + "\n");
                 } catch (IllegalArgumentException e) {
                     nearDead(entity, attack);
                 }
@@ -94,7 +98,7 @@ public class Entity {
                 nearDead(entity, attack);
             }
         } else {
-            System.out.println(getName() + " промахнулся");
+            System.out.println("\n" + getName() + " промахнулся." + "\n");
         }
     }
 
@@ -102,20 +106,22 @@ public class Entity {
         try {
             int healthAfterAttack = entity.getHealth() - attack;
             entity.setHealth(healthAfterAttack);
-            System.out.println("Атака произведена. " + entity.getName() + ": осталось " + entity.getHealth() + " единиц здоровья.");
+            System.out.println("\n" + "На ваших кубиках выпало заветное число 5 или 6. Атака произведена. " + "\n" + entity.getName() + ": осталось " + entity.getHealth() + " единиц(ы) здоровья." + "\n");
         } catch (IllegalArgumentException ex) {
-            System.out.println(entity.getName() + " умер. Введите цифру 1, чтобы восстановить здоворовье.");
+            System.out.println("\n" + entity.getName() + " умер. Введите любую цифру, чтобы восстановить здоровье." + "\n");
             int restoreHealth = scanner.nextInt();
-            if (restoreHealth == 1) {
-                try {
-                    entity.setAttemptToRestoreHealth(attemptToRestoreHealth - 1);
-                    entity.setHealth(entity.getMAX_HEALTH() / 2);
-                } catch (IllegalArgumentException exception) {
+            switch (restoreHealth) {
+                default -> {
                     try {
-                        entity.setHealth(0);
-                    } catch (IllegalArgumentException argumentException) {
-                        entity.setAttack(0);
-                        System.out.println("\n" + "Игра окончена" + "\n" + "Победил " + getName());
+                        entity.setAttemptToRestoreHealth(entity.attemptToRestoreHealth - 1);
+                        entity.setHealth(entity.getMAX_HEALTH() / 2);
+                    } catch (IllegalArgumentException exception) {
+                        try {
+                            entity.setHealth(0);
+                        } catch (IllegalArgumentException argumentException) {
+                            entity.setAttack(0);
+                            System.out.println("\n" + "Игра окончена" + "\n" + "Победил " + getName());
+                        }
                     }
                 }
             }
@@ -123,15 +129,15 @@ public class Entity {
     }
 
 
-    public int random() {
-        int random = 0;
+    public boolean random() {
+        HashSet<Integer> set = new HashSet<>();
+        int random;
 
         for (int i = 0; i < getDamage(); i++) {
             random = (int) (Math.random() * 6 + 1);
-            return random;
-
+            set.add(random);
         }
-        return random;
+        return set.contains(5) | set.contains(6);
     }
 
     @Override
@@ -143,14 +149,4 @@ public class Entity {
                 ", защита = " + protection +
                 ", урон = " + damage;
     }
-
-    public void setAttemptToRestoreHealth(int attemptToRestoreHealth) {
-        if (attemptToRestoreHealth < 1) {
-            throw new IllegalArgumentException();
-        } else {
-            this.attemptToRestoreHealth = attemptToRestoreHealth;
-        }
-    }
-
-
 }

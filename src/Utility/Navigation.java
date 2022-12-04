@@ -9,7 +9,7 @@ public class Navigation {
     }
 
     public static void choosingAnAction(){
-        System.out.println("Выберите действие:" + "\n" + "1. Атаковать!!!!!" + "\n" + "2. Вернуться вначало");
+        System.out.println("Выберите действие:" + "\n" + "1. Подбросить кубики для атаки противника." + "\n" + "2. Вернуться в начало.");
     }
 
 
